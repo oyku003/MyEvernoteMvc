@@ -1,0 +1,33 @@
+﻿@using MyEvernote.Entities
+@model List<Note>
+
+@{
+    ViewBag.Title = "About";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            @*Kategoriler*@
+            @Html.Partial("_PartialCategories")
+        </div>
+        <div class="col-md-9">
+          
+            <!--Yazılar-->
+            <div class="row">
+                <h2>
+                    Amet, jhfduahfuhauhfu
+                </h2>
+               
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@section footer{
+    @Html.Partial("_PartialFooter")
+
+}
