@@ -37,3 +37,5 @@ C:\Users\YAĞIZ\source\repos\MyEverNoteMvc\MyEverNoteMvc\bin\FakeData.dll
 C:\Users\YAĞIZ\source\repos\MyEverNoteMvc\MyEverNoteMvc\bin\FakeData.pdb
 C:\Users\YAĞIZ\source\repos\MyEverNoteMvc\MyEverNoteMvc\bin\MyEvernote.Common.dll
 C:\Users\YAĞIZ\source\repos\MyEverNoteMvc\MyEverNoteMvc\bin\MyEvernote.Common.pdb
+C:\Users\YAĞIZ\source\repos\MyEverNoteMvc\MyEverNoteMvc\bin\MyEvernote.Core.dll
+C:\Users\YAĞIZ\source\repos\MyEverNoteMvc\MyEverNoteMvc\bin\MyEvernote.Core.pdb

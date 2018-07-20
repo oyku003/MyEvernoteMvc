@@ -37,7 +37,7 @@ namespace MyEverNoteMvc.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             CategoryManager cm = new CategoryManager();
-            Category cat = cm.GetCategoryById(id.Value);
+            Category cat = new Category();//cm.GetCategoryById(id.Value);
 
             if (cat == null)
             {
