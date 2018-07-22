@@ -13,104 +13,109 @@ namespace MyEverNoteMvc.Controllers
 {
     public class CategoryController : Controller
     {
-     private CategoryManager categoryManager = new CategoryManager();
+        private CategoryManager categoryManager = new CategoryManager();
 
-      
-        //public ActionResult Index()
-        //{
-        //    return View(categoryManager.GetCategories());
-        //}
 
-    
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Category category = categoryManager.GetCategoryById(id.Value);
-        //    if (category == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(category);
-        //}
+        public ActionResult Index()//kategorileri listeler
+        {
+            return View(categoryManager.List());
+        }
 
-       
-        //        return HttpNotFound();
-        //    }
-        //    return View(category);
-        //} public ActionResult Create()
-        //{
-        //    return View();
-        //}
 
-      
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create( Category category)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        //db.Categories.Add(category);
-        //        //db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Category category = categoryManager.Find(x => x.Id == id);
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+            return View(category);
+        }
+        public ActionResult Create()
+        {
+            return View();
+        }
 
-        //    return View(category);
-        //}
 
-      
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Category category = db.Categories.Find(id);
-        //    if (category == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(category);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Category category)
+        {
+            ModelState.Remove("ModifiedUsername");
+            ModelState.Remove("ModifiedOn");
+            ModelState.Remove("CreatedOn");
+            if (ModelState.IsValid)
+            {
+                categoryManager.Insert(category);
+                return RedirectToAction("Index");
+            }
 
-   
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit( Category category)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(category).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(category);
-        //}
+            return View(category);
+        }
 
-       
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Category category = db.Categories.Find(id);
-        //    if (category == null)
-        //    {
 
-     
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Category category = db.Categories.Find(id);
-        //    db.Categories.Remove(category);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Category category = categoryManager.Find(x => x.Id == id.Value);
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+            return View(category);
+        }
 
-       
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Category category)
+        {
+            ModelState.Remove("ModifiedUsername");
+            ModelState.Remove("ModifiedOn");
+            ModelState.Remove("CreatedOn");
+            if (ModelState.IsValid)
+            {
+             Category cat= categoryManager.Find(x => x.Id == category.Id);
+                cat.Title = category.Title;
+                cat.Description = category.Description;
+                categoryManager.Update(cat);
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Category category = categoryManager.Find(x => x.Id == id.Value);//silmek istediğinizden emin misiniz diye sormak için ekrana bilgileri getiriyoruz
+            if (category == null)
+            {
+                return HttpNotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Category category = categoryManager.Find(x => x.Id == id);
+            categoryManager.Delete(category);
+          
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

@@ -9,11 +9,16 @@ using System.Net;
 using MyEverNoteMvc.Entities.ValueObjects;
 using MyEvernote.Entities_1.Messages;
 using MyEverNoteMvc.ViewModels;
+using MyEvernote.BusinessLayer_1.Results;
 
 namespace MyEverNoteMvc.Controllers
 {
     public class HomeController : Controller
     {
+        private NoteManager noteManager = new NoteManager();
+        private CategoryManager categoryManager = new CategoryManager();
+        private EvernoteUserManager evernoteUserManager = new EvernoteUserManager();
+
         // GET: Home
         public ActionResult Index()
         {
@@ -26,8 +31,8 @@ namespace MyEverNoteMvc.Controllers
              //test.UpdateTest();
              test.DeleteTest();*/
 
-            NoteManager nm = new NoteManager();
-            return View(nm.GetAllNotes().OrderByDescending(x => x.ModifiedOn).ToList());
+          
+            return View(noteManager.ListQueryable().OrderByDescending(x => x.ModifiedOn).ToList());
             //return View(nm.GetAllNoteQueryable().OrderByDescending(x=>x.ModifiedOn).ToList());
         }
         public ActionResult ByCategory(int? id)
@@ -36,8 +41,8 @@ namespace MyEverNoteMvc.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CategoryManager cm = new CategoryManager();
-            Category cat = new Category();//cm.GetCategoryById(id.Value);
+           
+            Category cat = categoryManager.Find(x => x.Id == id.Value);
 
             if (cat == null)
             {
@@ -49,8 +54,8 @@ namespace MyEverNoteMvc.Controllers
         }
         public ActionResult MostLiked()
         {
-            NoteManager nm = new NoteManager();
-            return View("Index", nm.GetAllNotes().OrderByDescending(x => x.LikeCount).ToList());
+           
+            return View("Index", noteManager.ListQueryable().OrderByDescending(x => x.LikeCount).ToList());
         }
         public ActionResult About()
         {
@@ -66,8 +71,8 @@ namespace MyEverNoteMvc.Controllers
         {
             if (ModelState.IsValid)//model uygunsa
             {
-                EvernoteUserManager eum = new EvernoteUserManager();
-                BusinessLayerResult<EvernoteUser> res = eum.LoginUser(model);
+               
+                BusinessLayerResult<EvernoteUser> res = evernoteUserManager.LoginUser(model);
                 if (res.Errors.Count > 0)
                 {
                     res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
@@ -92,9 +97,7 @@ namespace MyEverNoteMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                EvernoteUserManager eum = new EvernoteUserManager();
-
-                BusinessLayerResult<EvernoteUser> res = eum.RegisterUser(model);
+                BusinessLayerResult<EvernoteUser> res = evernoteUserManager.RegisterUser(model);
                 if (res.Errors.Count > 0)
                 {
                     res.Errors.ForEach(x => ModelState.AddModelError("", x.Message));
@@ -147,8 +150,8 @@ namespace MyEverNoteMvc.Controllers
 
         public ActionResult UserActivate(Guid id)
         {
-            EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EvernoteUser> res = eum.ActivateUser(id);
+          
+            BusinessLayerResult<EvernoteUser> res = evernoteUserManager.ActivateUser(id);
             if (res.Errors.Count > 0)
             {
                 ErrorViewModel notifyObj = new ErrorViewModel()
@@ -176,8 +179,7 @@ namespace MyEverNoteMvc.Controllers
         public ActionResult ShowProfile()
         {
             EvernoteUser currentUser = Session["login"] as EvernoteUser;
-            EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EvernoteUser>res= eum.GetUserById(currentUser.Id);
+            BusinessLayerResult<EvernoteUser>res= evernoteUserManager.GetUserById(currentUser.Id);
             if (res.Errors.Count > 0)
             {
                 ErrorViewModel errorNotifyObj = new ErrorViewModel()
@@ -193,8 +195,7 @@ namespace MyEverNoteMvc.Controllers
         public ActionResult EditProfile()
         {
             EvernoteUser currentUser = Session["login"] as EvernoteUser;
-            EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EvernoteUser> res = eum.GetUserById(currentUser.Id);
+            BusinessLayerResult<EvernoteUser> res = evernoteUserManager.GetUserById(currentUser.Id);
             if (res.Errors.Count > 0)
             {
                 ErrorViewModel errorNotifyObj = new ErrorViewModel()
@@ -225,8 +226,8 @@ namespace MyEverNoteMvc.Controllers
                     model.ProfileImageFilename = filename;
 
                 }
-                EvernoteUserManager eum = new EvernoteUserManager();
-                BusinessLayerResult<EvernoteUser> res = eum.UpdateProfile(model);
+                
+                BusinessLayerResult<EvernoteUser> res = evernoteUserManager.UpdateProfile(model);
                 if (res.Errors.Count > 0)
                 {
                     ErrorViewModel errorNotifyObj = new ErrorViewModel()
@@ -245,8 +246,7 @@ namespace MyEverNoteMvc.Controllers
         public ActionResult DeleteProfile()
         {
             EvernoteUser currentUser = Session["login"] as EvernoteUser;
-            EvernoteUserManager eum = new EvernoteUserManager();
-            BusinessLayerResult<EvernoteUser> res = eum.RemoveUserById(currentUser.Id);
+            BusinessLayerResult<EvernoteUser> res = evernoteUserManager.RemoveUserById(currentUser.Id);
             if (res.Errors.Count > 0)
             {
                 ErrorViewModel errorNotifyObj = new ErrorViewModel()

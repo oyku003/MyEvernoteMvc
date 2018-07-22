@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyEvernote.BusinessLayer_1
+namespace MyEvernote.BusinessLayer_1.Results
 {
   public class BusinessLayerResult<T> where T:class
     {

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using MyEvernote.DataAccessLayer_1.EntityFramework;
 
-namespace MyEvernote.BusinessLayer_1
+namespace MyEvernote.BusinessLayer_1.Abstract
 {
     public abstract class ManagerBase<T> : IDataAccess<T> where T : class
     {
-        private Repository<T> repo = new Repository<T>();
+        private Repository<T> repo = new Repository<T>();//gelen türe ait repoyu oluşturup newledik.
 
-        public int Delete(T obj)
+        public virtual int Delete(T obj)
         {
             return repo.Delete(obj);
         }
