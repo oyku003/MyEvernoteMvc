@@ -12,7 +12,8 @@ namespace MyEvernote.Entities
     [Table("EvernoteUsers")]
     public class EvernoteUser :MyEntityBase
     {
-        [DisplayName("İsim"), StringLength(25, ErrorMessage = "{0} alanı max.{1} karakter olmalıdır.")]
+        [DisplayName("İsim"), StringLength(25, ErrorMessage = "{0} alanı max.{1} karakter olmalıdır."),
+            ScaffoldColumn(false)]
         public string Name { get; set; }
 
         [DisplayName("Soyad"), StringLength(25, ErrorMessage = "{0} alanı max.{1} karakter olmalıdır.")]
@@ -30,14 +31,12 @@ namespace MyEvernote.Entities
         [StringLength(30)]//user_12
         public string ProfileImageFilename { get; set; }
 
+        [DisplayName("Is Active")]
         public bool IsActive { get; set; }
+        [DisplayName("Is Admin")]
         public bool IsAdmin { get; set; }
-        [Required]
+        [Required, ScaffoldColumn(false)]
         public Guid ActivateGuid { get; set; }
-
-       
-
-
         public virtual List<Note> Notes { get; set; }
         public virtual List<Comment> Comments { get; set; }
         public virtual List<Liked> Likes { get; set; }

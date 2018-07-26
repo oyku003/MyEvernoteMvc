@@ -11,6 +11,6 @@ namespace MyEvernote.BusinessLayer_1
 {
  public  class NoteManager :ManagerBase<Note>
     {
-      
+        
     }
 }

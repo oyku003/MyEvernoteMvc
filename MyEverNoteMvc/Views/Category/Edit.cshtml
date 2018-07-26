@@ -27,7 +27,7 @@
                     @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                      
                     </div>
                 </div>
 
@@ -35,7 +35,7 @@
                     @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                       
                     </div>
                 </div>
 
@@ -46,7 +46,8 @@
                         <button type="submit" value="Create" class="btn btn-success">
                             <span class="glyphicon glyphicon-floppy-save">Save</span>
                         </button>
-                        @Html.ActionLink("Back to List", "Index", "Category", null, new { @class = "btn btn-default" })
+                        @Bootstrap.Button("success", string.Empty, "submit", "floopy-saved", " Save")
+                        @Bootstrap.LinkButton("/Category/Index", "default", string.Empty, string.Empty, "arrow-left", "Back To List")
                     </div>
                 </div>
             </div>

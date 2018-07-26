@@ -12,113 +12,104 @@ using MyEvernote.BusinessLayer_1;
 
 namespace MyEverNoteMvc.Controllers
 {
-    public class NoteController : Controller
+    public class EvernoteUserController : Controller
     {
-        private NoteManager noteManager = new NoteManager();
-      
-        public ActionResult Index()//Notları listeler
+
+        private EvernoteUserManager evernoteUserManager = new EvernoteUserManager();
+       
+        public ActionResult Index()
         {
-            return View(noteManager.List());
+            return View(evernoteUserManager.List());
         }
-        
+
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Note note = noteManager.Find(x => x.Id == id.Value);
-            if (note == null)
+            EvernoteUser evernoteUser = evernoteUserManager.Find(x => x.Id == id.Value);
+            if (evernoteUser == null)
             {
                 return HttpNotFound();
             }
-            return View(note);
+            return View(evernoteUser);
         }
 
-       
+        
         public ActionResult Create()
         {
-          
             return View();
         }
 
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Note note)
+        public ActionResult Create(EvernoteUser evernoteUser)
         {
-            ModelState.Remove("ModifiedUsername");
-            ModelState.Remove("ModifiedOn");
-            ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
             {
-                noteManager.Insert(note);
+                db.EvernoteUsers.Add(evernoteUser);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            
-            return View(note);
+
+            return View(evernoteUser);
         }
 
-  
+       
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Note note = noteManager.Find(x => x.Id == id.Value);
-            if (note == null)
+            EvernoteUser evernoteUser = evernoteUserManager.Find(x => x.Id == id.Value);
+            if (evernoteUser == null)
             {
                 return HttpNotFound();
             }
-           
-            return View(note);
+            return View(evernoteUser);
         }
 
- 
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Note note)
+        public ActionResult Edit(EvernoteUser evernoteUser)
         {
-            ModelState.Remove("ModifiedUsername");
-            ModelState.Remove("ModifiedOn");
-            ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
             {
-                Note not = noteManager.Find(x => x.Id == note.Id);
-                not.Title = note.Title;
-                not.Text = note.Text;
-                noteManager.Update(not);
+                db.Entry(evernoteUser).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-          
-            return View(note);
+            return View(evernoteUser);
         }
 
-      
+       
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Note note = noteManager.Find(x=>x.Id == id.Value);
-            if (note == null)
+            EvernoteUser evernoteUser = evernoteUserManager.Find(x => x.Id == id.Value);
+            if (evernoteUser == null)
             {
                 return HttpNotFound();
             }
-            return View(note);
+            return View(evernoteUser);
         }
 
-      
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Note note = noteManager.Find(x => x.Id == id);
-            noteManager.Delete(note);
+            EvernoteUser evernoteUser = evernoteUserManager.Find(x => x.Id == id);
+            evernoteUserManager.Delete(evernoteUser);
             return RedirectToAction("Index");
         }
 
-      
+     
     }
 }
