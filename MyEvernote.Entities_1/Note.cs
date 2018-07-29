@@ -22,12 +22,12 @@ namespace MyEvernote.Entities
         [DisplayName("Beğenilme")]
         public int LikeCount { get; set; }
 
-
+        [DisplayName("Kategori")]
         public int CategoryId { get; set; }
 
         public virtual EvernoteUser Owner { get; set; }
         public virtual List<Comment> Commnets { get; set; }
-        [DisplayName("Kategori")]
+        
         public virtual Category Category { get; set; }
 
         public virtual List<Liked> Likes { get; set; }

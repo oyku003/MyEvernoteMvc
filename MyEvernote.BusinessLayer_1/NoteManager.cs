@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyEvernote.BusinessLayer_1
 {
- public  class NoteManager :ManagerBase<Note>
+   public  class NoteManager :ManagerBase<Note>
     {
         
     }

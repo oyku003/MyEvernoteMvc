@@ -58,14 +58,14 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="/Note/AddNew"><span class="glyphicon glyphicon-plus">Not Ekle</span></a>
+                                    @Bootstrap.LinkMenu("/Note/Create", "plus", " Not Ekle")
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
-                                    <a href="/Note/Index"><span class="glyphicon glyphicon-plus">Notlarım</span></a>
+                                    @Bootstrap.LinkMenu("/Note/Index", "th-list", " Notlarım")
                                 </li>
                                 <li>
-                                    <a href="/Note/MyLikedNotes"><span class="glyphicon glyphicon-plus">Beğendiklerim</span></a>
+                                   @Bootstrap.LinkMenu("/Note/MyLikedNotes", "heart", " Beğendiklerim")
                                 </li>
                                 @if (user.IsAdmin)
                                 {

@@ -33,8 +33,8 @@ namespace MyEvernote.BusinessLayer_1
                 }
             }
             else
-            {
-                int dbResult =Insert(new EvernoteUser()
+            {//base'deki insert'ü kullan dedik.Aşağıdaki insert ile çakışmaması için
+                int dbResult =base.Insert(new EvernoteUser()
                 {
                     Username = data.UserName,
                     Email = data.EMail,
@@ -143,7 +143,7 @@ namespace MyEvernote.BusinessLayer_1
                 res.Result.ProfileImageFilename = data.ProfileImageFilename;
 
             }
-            if (Update(res.Result) == 0)//update başarılı olsaydı 1 dönmesi lazımdı.
+            if (base.Update(res.Result) == 0)//update başarılı olsaydı 1 dönmesi lazımdı.
             {
                 res.AddError(ErrorMessageCode.ProfileCouldNotUpdate, "Profil güncellenemedi");
             }
@@ -162,6 +162,69 @@ namespace MyEvernote.BusinessLayer_1
             else
             {
                 res.AddError(ErrorMessageCode.UserCouldNotFind, "Kullanıcı bulunamadı");
+            }
+            return res;
+        }
+
+        public new BusinessLayerResult<EvernoteUser> Insert(EvernoteUser data) //base'deki metoda değil buraya gelmesini sağladık.override etseydik tipi değiştiremiyoduk.
+        {
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+            EvernoteUser user = Find(x => x.Username == data.Username || x.Email == data.Email);
+
+            res.Result = data;
+            if (user != null)
+            {
+                if (user.Username == data.Username)
+                {
+                    res.AddError(Entities_1.Messages.ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı");
+                }
+                if (user.Email == data.Email)
+                {
+                    res.AddError(Entities_1.Messages.ErrorMessageCode.EmailAlreadyExists, "E-Mail zaten kayıtlı");
+                }
+            }
+            else
+            {//base'deki insert'ü kullan dedik.Aşağıdaki insert ile çakışmaması için
+
+                data.ProfileImageFilename = "";
+                data.ActivateGuid = Guid.NewGuid();
+                int dbResult = base.Insert(res.Result);
+                if (base.Insert(res.Result) == 0)
+                {
+                    res.AddError(Entities_1.Messages.ErrorMessageCode.UserCouldNotInserted, "Kullanıcı eklenemedi");
+                }
+            }
+            return res;
+        }
+        public new BusinessLayerResult<EvernoteUser> Update(EvernoteUser data)
+        {
+            EvernoteUser db_user = Find(x => x.Username == data.Username || x.Email == data.Email);
+            BusinessLayerResult<EvernoteUser> res = new BusinessLayerResult<EvernoteUser>();
+
+            res.Result = data;
+            if (db_user != null && db_user.Id != data.Id)
+            {
+                if (db_user.Username == data.Username)
+                {
+                    res.AddError(ErrorMessageCode.UsernameAlreadyExists, "Kullanıcı adı kayıtlı");
+                }
+                if (db_user.Email == data.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailAlreadyExists, "E-posta adresi kayıtlı.");
+                }
+                return res;
+            }
+            res.Result = Find(x => x.Id == data.Id);//gelen dataya göre değil db'den cektik bütün verileri
+            res.Result.Email = data.Email;
+            res.Result.Name = data.Name;
+            res.Result.Surname = data.Surname;
+            res.Result.Password = data.Password;
+            res.Result.Username = data.Username;
+            res.Result.IsActive = data.IsActive;
+            res.Result.IsAdmin = data.IsAdmin;
+            if (base.Update(res.Result) == 0)//update başarılı olsaydı 1 dönmesi lazımdı.
+            {
+                res.AddError(ErrorMessageCode.UserCouldNotUpdated, "Kullanıcı Güncellenemedi");
             }
             return res;
         }

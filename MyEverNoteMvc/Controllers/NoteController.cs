@@ -6,19 +6,31 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using MyEverNoteMvc.Models;
+//using MyEverNoteMvc.Models;
 using MyEvernote.Entities;
 using MyEvernote.BusinessLayer_1;
+using MyEverNoteMvc.Models;
 
 namespace MyEverNoteMvc.Controllers
 {
     public class NoteController : Controller
     {
         private NoteManager noteManager = new NoteManager();
-      
+        private  CategoryManager categoryManager = new CategoryManager();
+        private LikedManager likedManager = new LikedManager();
+
         public ActionResult Index()//Notları listeler
         {
-            return View(noteManager.List());
+            var notes = noteManager.ListQueryable().Include("Category").Include("Owner").Where(x => x.Owner.Id == CurrentSession.User.Id).OrderByDescending(x => x.ModifiedOn);//ListQueryable = select * from note  , Include = join, Include içinde note entitysinde user için property adı owner oldugu için onu yazdık
+
+            return View(notes.ToList());
+        }
+
+        public ActionResult MyLikedNotes()
+        {
+            var notes = likedManager.ListQueryable().Include("LikedUser").Include("Note").Where(x => x.Id == CurrentSession.User.Id).Select(x => x.Note).Include("Category").Include("Owner").OrderByDescending(x => x.ModifiedOn);//whereden dönen nesneden notlar arasındakileri modifed on a göre tersten sıraladık
+
+            return View("Index", notes.ToList());
         }
         
         public ActionResult Details(int? id)
@@ -38,7 +50,7 @@ namespace MyEverNoteMvc.Controllers
        
         public ActionResult Create()
         {
-          
+            ViewBag.CategoryId = new SelectList(categoryManager.List(), "Id", "Title");
             return View();
         }
 
@@ -51,10 +63,11 @@ namespace MyEverNoteMvc.Controllers
             ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
             {
+                note.Owner = CurrentSession.User;
                 noteManager.Insert(note);
                 return RedirectToAction("Index");
             }
-            
+            ViewBag.CategoryId = new SelectList(categoryManager.List(), "Id", "Title", note.CategoryId);
             return View(note);
         }
 
@@ -70,7 +83,7 @@ namespace MyEverNoteMvc.Controllers
             {
                 return HttpNotFound();
             }
-           
+            ViewBag.CategoryId = new SelectList(categoryManager.List(), "Id", "Title", note.CategoryId);
             return View(note);
         }
 
@@ -84,13 +97,15 @@ namespace MyEverNoteMvc.Controllers
             ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
             {
-                Note not = noteManager.Find(x => x.Id == note.Id);
-                not.Title = note.Title;
-                not.Text = note.Text;
-                noteManager.Update(not);
+                Note db_note = noteManager.Find(x => x.Id == note.Id);
+                db_note.Title = note.Title;
+                db_note.Text = note.Text;
+                db_note.IsDraft = note.IsDraft;
+                db_note.CategoryId = note.CategoryId;
+                noteManager.Update(db_note);
                 return RedirectToAction("Index");
             }
-          
+            ViewBag.CategoryId = new SelectList(categoryManager.List(), "Id", "Title", note.CategoryId);
             return View(note);
         }
 
@@ -118,7 +133,6 @@ namespace MyEverNoteMvc.Controllers
             noteManager.Delete(note);
             return RedirectToAction("Index");
         }
-
-      
+        
     }
 }
