@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyEvernote.Entities;
 using MyEvernote.BusinessLayer_1;
+using MyEverNoteMvc.Models;
 
 namespace MyEverNoteMvc.Controllers
 {
@@ -49,8 +50,8 @@ namespace MyEverNoteMvc.Controllers
             ModelState.Remove("ModifiedOn");
             ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
-            {
-                categoryManager.Insert(category);
+            {   categoryManager.Insert(category);
+                CacheHelper.RemoveCategoriesFromCache();
                 return RedirectToAction("Index");
             }
 
@@ -86,6 +87,7 @@ namespace MyEverNoteMvc.Controllers
                 cat.Title = category.Title;
                 cat.Description = category.Description;
                 categoryManager.Update(cat);
+                CacheHelper.RemoveCategoriesFromCache();
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -112,7 +114,7 @@ namespace MyEverNoteMvc.Controllers
         {
             Category category = categoryManager.Find(x => x.Id == id);
             categoryManager.Delete(category);
-          
+            CacheHelper.RemoveCategoriesFromCache();
             return RedirectToAction("Index");
         }
 

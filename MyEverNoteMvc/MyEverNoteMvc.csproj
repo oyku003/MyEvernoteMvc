@@ -117,6 +117,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\Comment.cs" />
     <Compile Include="Controllers\EvernoteUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
@@ -124,6 +125,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Init\WebCommon.cs" />
+    <Compile Include="Models\CacheHelper.cs" />
     <Compile Include="Models\CurrentSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />
@@ -168,6 +170,7 @@
     <Content Include="Views\EvernoteUser\Details.cshtml" />
     <Content Include="Views\EvernoteUser\Edit.cshtml" />
     <Content Include="Views\EvernoteUser\Index.cshtml" />
+    <Content Include="Views\Shared\_PartialComments.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -177,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyEvernote.BusinessLayer_1\MyEvernote.BusinessLayer_1.csproj">
