@@ -106,15 +106,4 @@
     
     }
 @Bootstrap.ModalPopup(id: "modal_comment", title : "Yorumlar")
-<script>
-    //sayfa yüklendikten sonra..
-    $(function () {
-        $('#modal_comment').on('show.bs.modal', function (e) {
-            var btn = $(e.relatedTarget);
-            var noteid = btn.data("note-id");
-            $('#modal_comment_body').load("/Comment/ShowNoteComments/"+ noteid);
-        })
-
-    });
-
-</script>
+<script src="~/Scripts/comment.js"></script>

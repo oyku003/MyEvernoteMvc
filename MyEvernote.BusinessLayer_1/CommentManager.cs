@@ -10,5 +10,6 @@ namespace MyEvernote.BusinessLayer_1
 {
   public  class CommentManager :ManagerBase <Comment>
     {
+
     }
 }
