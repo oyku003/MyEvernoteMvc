@@ -1,5 +1,6 @@
 ﻿using MyEvernote.BusinessLayer_1;
 using MyEvernote.Entities;
+using MyEverNoteMvc.Filters;
 using MyEverNoteMvc.Models;
 using System.Net;
 using System.Web;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace MyEverNoteMvc.Controllers
 {
+    [Exc]
     public class CommentController : Controller
     {
         private NoteManager noteManager = new NoteManager();
@@ -25,6 +27,7 @@ namespace MyEverNoteMvc.Controllers
             }
             return PartialView("_PartialComments", note.Commnets);
         }
+        [Auth]
         [HttpPost]
         public ActionResult Edit(int?id, string text)
         {
@@ -47,7 +50,7 @@ namespace MyEverNoteMvc.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
             
         }
-
+        [Auth]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -67,6 +70,7 @@ namespace MyEverNoteMvc.Controllers
 
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
+        [Auth]
         [HttpPost]
         public ActionResult Create(Comment comment, int noteid)
         {

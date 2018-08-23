@@ -1,11 +1,11 @@
 ﻿var modalCommentBodyId = "#modal_comment_body";
-var noteId = -1;
+var noteid = -1;
 //sayfa yüklendikten sonra..
 $(function () {
     $('#modal_comment').on('show.bs.modal', function (e) {
         var btn = $(e.relatedTarget);
         noteid = btn.data("note-id");
-        $('#modal_comment_body').load("/Comment/ShowNoteComments/" + noteid);
+        $(modalCommentBodyId).load("/Comment/ShowNoteComments/" + noteid);
     })
 
 });
